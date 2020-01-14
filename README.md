@@ -15,4 +15,4 @@ voronoi_dict = LaguerreVoronoi.compute_voronoi_cells(S, V, tri_list)
 - `tri_list: Array{Any, 1}`
   - containing the triplets for each triangulation
 - `voronoi_dict: Dict{Int64,Array{Any,1}}`
-  - Each entry of the dictionary is an array containing the cell borders. Each cell of that array is a tuple `((i, j), (v, d), s, t)` representing a segment `v + d * k`, with `s <= k <= t`. The tuple `(i, j)` refers to the indices of the vertices in `V` that form that segment. `nothing` is used to represent a point in the infinite or an infinite magnitude, for rays. 
+  - Each entry of the dictionary is an array containing the cell borders. Each cell of that array is a tuple `((i, j), (v, d), s, t)` representing a segment `v + d * k`, with `s <= k <= t`. The tuple `(i, j)` refers to the indices of the vertices in `V` that form that segment. `nothing` is used to indicate a point in the infinite or an infinite scalar, for rays. 
