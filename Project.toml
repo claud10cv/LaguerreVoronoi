@@ -1,0 +1,8 @@
+name = "LaguerreVoronoi"
+uuid = "e2403620-b030-4fa5-8994-0cb25fd74009"
+authors = ["Claudio Contardo <ccontard@gmail.com>"]
+version = "0.1.0"
+
+[deps]
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+QHull = "a8468747-bd6f-53ef-9e5c-744dbc5c59e7"
