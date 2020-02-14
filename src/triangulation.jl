@@ -2,8 +2,12 @@ using QHull
 
 function power_triangulation(S, R)
     ncircles, sdim = size(S)
-    S_norm = sum(S .^2; dims = 2) - R .^ 2
-    S_lifted = hcat(S, S_norm)
+    S_lifted = zeros(ncircles, 3)
+    for i in 1 : ncircles
+        S_lifted[i, 1] = S[i, 1]
+        S_lifted[i, 2] = S[i, 2]
+        S_lifted[i, 3] = S[i, 1]^2 + S[i, 2]^2 - R[i]^2
+    end
     if ncircles == 3
         if is_ccw_triangle(S[1, :], S[2, :], S[3, :])
             return [(1, 2, 3)], [get_power_circumcenter(S_lifted[1, :], S_lifted[2, :], S_lifted[3, :])]
@@ -12,12 +16,12 @@ function power_triangulation(S, R)
         end
     end
     hull = chull(S_lifted)
-    # println("hull = $hull")
     tri_list = []
     nfacets, dimfacets = size(hull.facets)
-    for (simplex, facet) in zip(hull.simplices, [hull.facets[i, :] for i in 1 : nfacets])
-        # println("simplex = $simplex, facet = $facet")
-        if facet[4] <= 0
+    for i in 1 : nfacets
+        facet = hull.facets[i, :]
+        simplex = hull.simplices[i]
+        if facet[3] <= 0
             a, b, c = simplex[1], simplex[2], simplex[3]
             if is_ccw_triangle(S[a, :], S[b, :], S[c, :])
                 push!(tri_list, (a, b, c))

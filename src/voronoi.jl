@@ -1,4 +1,4 @@
-using LinearAlgebra
+using LinearAlgebra, QHull, Polyhedra
 
 function compute_voronoi_cells(S, V, tri_list)
     vertices_set = Set([u for t in tri_list for u in t])
@@ -15,50 +15,38 @@ function compute_voronoi_cells(S, V, tri_list)
         end
     end
     cell_dict = Dict(i => [] for i in vertices_set)
-    for e in keys(edge_dict)
-        u, v = e
-        if length(edge_dict[e]) == 2 # finite Voronoi edge
-            k, j = edge_dict[e][1], edge_dict[e][2]
-            edge_kj = ((k, j), (V[k], (V[j] - V[k]) / euc(V[j] - V[k]), 0, euc(V[j] - V[k])))
-            edge_jk = ((j, k), (V[j], (V[k] - V[j]) / euc(V[k] - V[j]), 0, euc(V[k] - V[j])))
-            if is_ccw_triangle(V[k], V[j], S[u, :])
-                push!(cell_dict[u], edge_kj)
-                push!(cell_dict[v], edge_jk)
+    nV = size(V, 1)
+    Vmat = zeros(nV, 2)
+    for (i, v) in enumerate(V)
+        Vmat[i, 1] = v[1]
+        Vmat[i, 2] = v[2]
+    end
+    vpol = polyhedron(vrep(Vmat), QHull.Library())
+    for (i, tri) in enumerate(tri_list)
+        a, b, c = tri
+        for (u, v, w) in [(a, b, c), (b, c, a), (c, a, b)]
+            edge = u < v ? (u, v) : (v, u)
+            if length(edge_dict[edge]) == 2
+                j, k = edge_dict[edge]
+                if k == i
+                    j, k = k, j
+                end
+                U = V[k] - V[j]
+                push!(cell_dict[u], ((j, k), (V[j], U, 0, 1)))
             else
-                push!(cell_dict[u], edge_jk)
-                push!(cell_dict[v], edge_kj)
-            end
-        else # infinite Voronoi edge
-            i = edge_dict[e][1]
-            A = V[i]
-            B = S[v, :] - S[u, :]
-            if abs(B[1]) > 1e-7
-                U = [-B[2] / B[1], 1]
-            else
-                U = [1, -B[1] / B[2]]
-            end
-            U = normalize(U)
-            X = hcat(B, - U) \ (A - S[u, :])
-            # println("printing inverse")
-            # println("det = $(det(hcat(B, - U)))")
-            # println("B = $B")
-            # println("U = $U")
-            # println(inv(hcat(B, - U)))
-            # println("done")
-            # X = inv(hcat(B, - U)) * (A - S[u, :])
-            if X[2] <= 0
-                U = -U
-            end
-            if is_ccw_triangle(A, A + U, S[u, :])
-                push!(cell_dict[u], ((i, nothing), (A, U, 0, nothing)))
-                push!(cell_dict[v], ((nothing, i), (A, -U, nothing, 0)))
-            else
-                push!(cell_dict[u], ((nothing, i), (A, -U, nothing, 0)))
-                push!(cell_dict[v], ((i, nothing), (A, U, 0, nothing)))
+                j = edge_dict[edge][1]
+                A, B, C, D = S[u, :], S[v, :], S[w, :], V[j]
+                U = normalize(B - A)
+                I = A + dot(D - A, U) * U
+                W = normalize(I - D)
+                if dot(W, I - C) < 0
+                    W = -W
+                end
+                push!(cell_dict[u], ((j, nothing), (V[j], W, 0, nothing)))
+                push!(cell_dict[v], ((nothing, j), (V[j], -W, nothing, 0)))
             end
         end
     end
 
-    # println("cell dict = $cell_dict")
     return cell_dict
 end
