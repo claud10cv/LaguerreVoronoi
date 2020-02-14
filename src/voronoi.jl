@@ -2,7 +2,7 @@ using LinearAlgebra, QHull, Polyhedra
 
 function compute_voronoi_cells(S, V, tri_list)
     vertices_set = Set([u for t in tri_list for u in t])
-    println("vertices_set = $vertices_set")
+#    println("vertices_set = $vertices_set")
     edge_dict = Dict{Tuple{Int64, Int64}, Array{Int64, 1}}()
     for (i, tri) in enumerate(tri_list)
         for edge in [(tri[1], tri[2]), (tri[1], tri[3]), (tri[2], tri[3])]
