@@ -10,5 +10,6 @@ Polyhedra = "67491407-f73d-577b-9b50-8179a7c68029"
 QHull = "a8468747-bd6f-53ef-9e5c-744dbc5c59e7"
 
 [compat]
+Plots = "0.29"
 QHull = "0.1.2"
 julia = "1.3"
