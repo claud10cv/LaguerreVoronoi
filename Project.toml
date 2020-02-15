@@ -9,5 +9,6 @@ Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
 QHull = "a8468747-bd6f-53ef-9e5c-744dbc5c59e7"
 
 [compat]
+Plots = "0.29"
 QHull = "0.1.2"
 julia = "1.3"
