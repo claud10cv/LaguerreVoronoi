@@ -1,5 +1,3 @@
-using QHull
-
 function power_triangulation(S, R)
     ncircles, sdim = size(S)
     S_lifted = zeros(ncircles, 3)

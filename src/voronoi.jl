@@ -1,5 +1,3 @@
-using LinearAlgebra, QHull, Polyhedra
-
 function compute_voronoi_cells(S, V, tri_list)
     vertices_set = Set([u for t in tri_list for u in t])
 #    println("vertices_set = $vertices_set")

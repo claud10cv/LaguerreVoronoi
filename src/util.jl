@@ -1,5 +1,3 @@
-using LinearAlgebra, Plots
-
 function is_ccw_triangle(A, B, C)
     cross_z(A, B) + cross_z(B, C) + cross_z(C, A) > 0
 end
