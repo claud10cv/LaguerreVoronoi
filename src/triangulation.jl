@@ -18,7 +18,7 @@ function power_triangulation(S, R)
     nfacets, dimfacets = size(hull.facets)
     for i in 1 : nfacets
         facet = hull.facets[i, :]
-        simplex = hull.simplices[i]
+        simplex = hull.simplices[i, :]
         if facet[3] <= 0
             a, b, c = simplex[1], simplex[2], simplex[3]
             if is_ccw_triangle(S[a, :], S[b, :], S[c, :])
