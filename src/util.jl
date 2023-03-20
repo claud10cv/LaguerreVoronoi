@@ -73,8 +73,14 @@ function plot_voronoi_diagram(S, R, cell_dict, tri_list, V)
         theta = LinRange(0, 2*pi, 1000)
         p[1] .+ r * sin.(theta), p[2] .+ r * cos.(theta)
     end
-    p = plot(xlims = (-0.5, 1.5),# xticks = -0.1 : 0.2 : 1.1,
-            ylims = (-0.5, 1.5),# yticks = -0.1 : 0.2 : 1.1,
+
+    xmin = minimum(S[:, 1]) - maximum(R) - 1
+    xmax = maximum(S[:, 1]) + maximum(R) + 1
+    ymin = minimum(S[:, 2]) - maximum(R) - 1
+    ymax = maximum(S[:, 2]) + maximum(R) + 1
+    
+    p = plot(xlims = (xmin, xmax),# xticks = -0.1 : 0.2 : 1.1,
+            ylims = (ymin, ymax),# yticks = -0.1 : 0.2 : 1.1,
             aspect_ratio = 1,
             showaxis = false)
     for i in 1 : ncircles
