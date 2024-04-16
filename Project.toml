@@ -1,7 +1,7 @@
 name = "LaguerreVoronoi"
 uuid = "e2403620-b030-4fa5-8994-0cb25fd74009"
 authors = ["Claudio Contardo <ccontard@gmail.com>"]
-version = "0.1.4"
+version = "0.1.5"
 
 [deps]
 Distances = "b4f34e82-e78d-54a5-968a-f98e89d6e8f7"
